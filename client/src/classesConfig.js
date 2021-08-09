@@ -6,17 +6,23 @@ const classesConfig = [
         isMultiSelect: false,
     },
     {
+        property: "object",
+        name: "Object",
+        options: ["no_vehicle", "other_vehicle", "ok_car", "broken_car"],
+        isMultiSelect: false,
+    },
+    {
         property: "severity",
         name: "Severity",
         options: ["low", "medium", "high"],
         isMultiSelect: false,
     },
     {
-        property: "part",
-        name: "Part",
-        options: ["front_window", "side_window", "back_window", "side_door", "front", "back"],
+        property: "damage_type",
+        name: "Damage Type",
+        options: ["bumper_dent", "door_dent", "glass_shatter", "h_lamp_broken", "t_lamp_broken", "scratch", "smash", "other"],
         isMultiSelect: true,
     }
 ]
 
-export default classesConfig;
+module.exports = classesConfig;

@@ -1,0 +1,8 @@
+id,time_of_day-day,time_of_day-night,object-no_vehicle,object-other_vehicle,object-ok_car,object-broken_car,severity-low,severity-medium,severity-high,damage_type-bumper_dent,damage_type-door_dent,damage_type-glass_shatter,damage_type-h_lamp_broken,damage_type-t_lamp_broken,damage_type-scratch,damage_type-smash,damage_type-other
+M338108002.jpg,true,false,false,false,false,true,true,false,false,false,false,false,false,false,false,false,true
+M338108003.jpg,true,false,false,false,false,true,true,false,false,false,true,false,false,false,false,false,true
+M338108004.jpg,true,false,false,false,true,false,true,false,false,false,true,false,false,false,false,false,true
+M338108005.jpg,true,false,false,false,true,false,false,false,false,false,false,false,false,false,false,false,false
+M338108006.jpg,true,false,false,false,true,false,false,false,false,false,false,false,false,false,false,false,false
+M338108007.jpg,true,false,false,false,false,true,true,false,false,false,true,false,false,false,false,false,true
+M349762006.jpg,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false

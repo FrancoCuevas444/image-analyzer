@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { SideBySideMagnifier } from 'react-image-magnifiers';
+import React, {useState, useEffect} from 'react';
+import {SideBySideMagnifier} from 'react-image-magnifiers';
 import ClassSelector from './ClassSelector';
 import classesConfig from "./classesConfig";
 import './App.css';
-
-
-const dir = '../imgs'
 
 function App() {
     const [imagesInfo, setImagesInfo] = useState({});
@@ -15,27 +12,41 @@ function App() {
     const leftPress = useKeyPress("ArrowLeft");
     const rightPress = useKeyPress("ArrowRight");
 
-    const handleFilterChange = function(filterProperty, newValue) {
-        imagesInfo[imageFiles[currentImageIndex]][filterProperty] = newValue;
-        setImagesInfo(imagesInfo);
+    const handleFilterChange = function (filterProperty, newValue) {
+        let newImagesInfo = JSON.parse(JSON.stringify(imagesInfo));
+        newImagesInfo[imageFiles[currentImageIndex]][filterProperty] = newValue;
+        setImagesInfo(newImagesInfo);
     }
+    useEffect(() => {
+        preloadImagesInfo(setImagesInfo);
+    }, [])
 
     useEffect(() => {
         fetch('/api/list')
             .then(response => response.json())
             .then(data => {
                 setImageFiles(data.filter(f => f.endsWith(".jpg")));
-
-                let newImagesInfo = {}
-                data.forEach(d => {
-                    newImagesInfo[d] = {};
-                    classesConfig.forEach(classConfig => {
-                        newImagesInfo[d][classConfig] = [];
-                    });
-                });
-                setImagesInfo(newImagesInfo);
-            });
+            })
+            .catch((reason) => console.log(reason));
     }, []);
+
+    useEffect(() => {
+        if (!imagesInfo || (Object.keys(imagesInfo).length === 0)) {
+            return;
+        }
+
+        fetch("/api/state/1", {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(imagesInfo),
+        })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch((reason) => console.log(reason));
+    }, [imagesInfo]);
 
     useEffect(() => {
         if (imageFiles.length && rightPress) {
@@ -71,11 +82,42 @@ function App() {
     );
 }
 
+function preloadImagesInfo(setImagesInfo) {
+    fetch("/api/state/1")
+        .then(async resp => {
+            const jsonResp = await resp.json();
+            console.log(jsonResp);
+            if (resp.ok && jsonResp && Object.keys(jsonResp).length !== 0) {
+                setImagesInfo(jsonResp);
+                return;
+            }
+
+            console.log("state file not found");
+            fetch('/api/list')
+                .then(response => response.json())
+                .then(data => {
+                    let newImagesInfo = {}
+                    data.forEach(d => {
+                        newImagesInfo[d] = {};
+                        classesConfig.forEach(classConfig => {
+                            newImagesInfo[d][classConfig.property] = [];
+                        });
+                    });
+                    setImagesInfo(newImagesInfo);
+                })
+                .catch((reason) => console.log(reason));
+        })
+        .catch(err => {
+            console.log(err);
+        });
+}
+
 function generateFilters(handleFilterChange, currentImageInfo) {
     let filters = []
     classesConfig.forEach(classConfig => {
         filters.push(
             <ClassSelector
+                key={classConfig.property}
                 property={classConfig.property}
                 name={classConfig.name}
                 options={classConfig.options}
@@ -89,16 +131,16 @@ function generateFilters(handleFilterChange, currentImageInfo) {
     return filters;
 }
 
-const useKeyPress = function(targetKey) {
+const useKeyPress = function (targetKey) {
     const [keyPressed, setKeyPressed] = useState(false);
 
-    function downHandler({ key }) {
+    function downHandler({key}) {
         if (key === targetKey) {
             setKeyPressed(true);
         }
     }
 
-    const upHandler = ({ key }) => {
+    const upHandler = ({key}) => {
         if (key === targetKey) {
             setKeyPressed(false);
         }
