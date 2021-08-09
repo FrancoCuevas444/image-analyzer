@@ -74,7 +74,7 @@ function generateCSVData(imagesInfo) {
         let newEntry = {id: key}
         classesConfig.forEach(classConfig => {
             classConfig.options.forEach(classOption => {
-                newEntry[`${classConfig.property}-${classOption}`] = value[classConfig.property].includes(classOption).toString();
+                newEntry[`${classConfig.property}-${classOption}`] = value[classConfig.property] && value[classConfig.property].includes(classOption).toString();
             });
         });
         data.push(newEntry);
