@@ -3,7 +3,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Setup
-
+0) Run `npm i nodemon -g`
 1) In the project directory run `npm install`
 2) Then, in the same directory run `yarn`. To install `yarn` use `npm install --global yarn`.
 3) Then `cd` into `/client` folder, and run `npm install` there as well.
