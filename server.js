@@ -29,7 +29,7 @@ app.get('/api/stats', (req, res) => {
         categories: {
             useful_yes: Object.values(state).filter(v => v.useful === "yes").length,
             useful_no: Object.values(state).filter(v => v.useful === "no").length,
-            useful_maybe: Object.values(state).filter(v => v.useful === "no").length
+            useful_maybe: Object.values(state).filter(v => v.useful === "maybe").length
         }
     });
 });
