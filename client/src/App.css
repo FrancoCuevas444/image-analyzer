@@ -1,3 +1,9 @@
+p {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 5px;
+}
+
 .App {
   text-align: center;
   background-color: #282c34;
@@ -7,6 +13,36 @@
 .flex-row {
   display: flex;
   flex-direction: row;
+}
+
+.flex-row-center {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.metadata-labels {
+  margin: 1px;
+  text-align: right;
+}
+
+.metadata-values {
+  margin: 1px;
+  font-style: italic;
+  text-align: left;
+}
+
+.metadata-box {
+  margin-right: 25px;
+  margin-left: 25px;
+  display: flex;
+  flex-direction: column;
 }
 
 .flex-row h3 {
@@ -26,4 +62,11 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
+}
+
+.small-width {
+  padding-top: 20px;
+  margin-bottom: 20px;
+  width: 200px;
+  text-align: center;
 }

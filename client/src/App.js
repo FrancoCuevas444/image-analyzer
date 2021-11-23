@@ -3,116 +3,114 @@ import {SideBySideMagnifier} from 'react-image-magnifiers';
 import ClassSelector from './ClassSelector';
 import classesConfig from "./classesConfig";
 import './App.css';
+import MetadataTooltip from "./MetadataTooltip";
 
 function App() {
-    const [imagesInfo, setImagesInfo] = useState({});
-    const [imageFiles, setImageFiles] = useState([]);
+    const [imageInfo, setImageInfo] = useState({});
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     const leftPress = useKeyPress("ArrowLeft");
     const rightPress = useKeyPress("ArrowRight");
 
     const handleFilterChange = function (filterProperty, newValue) {
-        let newImagesInfo = JSON.parse(JSON.stringify(imagesInfo));
-        newImagesInfo[imageFiles[currentImageIndex]][filterProperty] = newValue;
-        setImagesInfo(newImagesInfo);
+        let newImageInfo = JSON.parse(JSON.stringify(imageInfo));
+        newImageInfo.state[filterProperty] = newValue;
+        setImageInfo(newImageInfo);
     }
-    useEffect(() => {
-        preloadImagesInfo(setImagesInfo);
-    }, [])
+
+    const handlePartsChange = (event, index) => {
+        let newImageInfo = JSON.parse(JSON.stringify(imageInfo));
+        if (event.target.checked) {
+            newImageInfo.state["selected_parts"].push(index);
+        } else {
+            newImageInfo.state["selected_parts"] = newImageInfo.state["selected_parts"].filter(e => e === index);
+        }
+
+        setImageInfo(newImageInfo);
+    };
 
     useEffect(() => {
-        fetch('/api/list')
-            .then(response => response.json())
-            .then(data => {
-                setImageFiles(data.filter(f => f.endsWith(".jpg")));
-            })
-            .catch((reason) => console.log(reason));
-    }, []);
+        loadImageInfo(currentImageIndex, setImageInfo);
+    }, [currentImageIndex]);
+
+    const currentImageName = imageInfo ? imageInfo.filename: "";
+    const currentImageState = imageInfo ? imageInfo.state : null;
 
     useEffect(() => {
-        if (!imagesInfo || (Object.keys(imagesInfo).length === 0)) {
+        if (!currentImageState || (Object.keys(currentImageState).length === 0)) {
             return;
         }
 
-        fetch("/api/state/1", {
-            method: "POST",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(imagesInfo),
-        })
-            .then(response => response.json())
-            .then(data => console.log(data))
-            .catch((reason) => console.log(reason));
-    }, [imagesInfo]);
+        saveImageState(currentImageName, currentImageState);
+    }, [currentImageName, currentImageState]);
 
     useEffect(() => {
-        if (imageFiles.length && rightPress) {
-            setCurrentImageIndex(prevState =>
-                prevState < imageFiles.length - 1 ? prevState + 1 : prevState
-            );
+        if (rightPress) {
+            setCurrentImageIndex(prevState => prevState + 1);
         }
-    }, [imageFiles, rightPress]);
+    }, [rightPress]);
 
     useEffect(() => {
-        if (imageFiles.length && leftPress) {
-            setCurrentImageIndex(prevState => (prevState > 0 ? prevState - 1 : prevState));
+        if (leftPress) {
+            setCurrentImageIndex(prevState => prevState - 1);
         }
-    }, [imageFiles, leftPress]);
+    }, [leftPress]);
 
-    const currentImageName = imageFiles[currentImageIndex];
-    const imageUrl = imageFiles.length > 0 ? `/${currentImageName}` : "";
+    const imageUrl = `/${currentImageName}`;
 
     return (
         <div className="App">
             <div key={currentImageName} className="main-container">
                 <h3>{currentImageName}</h3>
-                {generateFilters(handleFilterChange, imagesInfo[currentImageName])}
-                <SideBySideMagnifier
-                    key={imageUrl}
-                    imageSrc={imageUrl}
-                    style={{width: 800}}
-                    fillAvailableSpace={false}
-                    switchSides={false}
-                />
+                {generateFilters(handleFilterChange, currentImageState)}
+                <div className={"flex-row"}>
+                    <MetadataTooltip
+                        metadata={imageInfo.metadata ? imageInfo.metadata: {}}
+                        setSelectedParts={handlePartsChange}
+                        selectedParts={imageInfo && imageInfo.state ? imageInfo.state["selected_parts"]: null}
+                    />
+                    <SideBySideMagnifier
+                        key={imageUrl}
+                        imageSrc={imageUrl}
+                        style={{width: 700}}
+                        fillAvailableSpace={false}
+                        switchSides={false}
+                    />
+                </div>
             </div>
         </div>
     );
 }
 
-function preloadImagesInfo(setImagesInfo) {
-    fetch("/api/state/1")
+function saveImageState(currentImageName, currentImageState) {
+    fetch(`/api/state?filename=${currentImageName}`, {
+        method: "PUT",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(currentImageState),
+    })
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch((reason) => console.log(reason));
+}
+
+function loadImageInfo(currentImageIndex, setImageInfo) {
+    fetch(`/api/files/${currentImageIndex}`)
         .then(async resp => {
             const jsonResp = await resp.json();
             console.log(jsonResp);
             if (resp.ok && jsonResp && Object.keys(jsonResp).length !== 0) {
-                setImagesInfo(jsonResp);
-                return;
+                setImageInfo(jsonResp);
             }
-
-            console.log("state file not found");
-            fetch('/api/list')
-                .then(response => response.json())
-                .then(data => {
-                    let newImagesInfo = {}
-                    data.forEach(d => {
-                        newImagesInfo[d] = {};
-                        classesConfig.forEach(classConfig => {
-                            newImagesInfo[d][classConfig.property] = [];
-                        });
-                    });
-                    setImagesInfo(newImagesInfo);
-                })
-                .catch((reason) => console.log(reason));
         })
         .catch(err => {
             console.log(err);
         });
 }
 
-function generateFilters(handleFilterChange, currentImageInfo) {
+function generateFilters(handleFilterChange, currentImageState) {
     let filters = []
     classesConfig.forEach(classConfig => {
         filters.push(
@@ -123,7 +121,7 @@ function generateFilters(handleFilterChange, currentImageInfo) {
                 options={classConfig.options}
                 isMultiSelect={classConfig.isMultiSelect}
                 onValueChange={(newValue) => handleFilterChange(classConfig.property, newValue)}
-                defaultOptions={currentImageInfo ? currentImageInfo[classConfig.property] : []}
+                defaultOptions={currentImageState ? currentImageState[classConfig.property] : []}
             />
         );
     });
