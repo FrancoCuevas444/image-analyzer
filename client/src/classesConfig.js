@@ -1,33 +1,15 @@
 const classesConfig = [
     {
-        property: "quality",
-        name: "Quality",
-        options: ["ok", "blurry", "dark", "flash/sun", "other_bad"],
+        property: "useful",
+        name: "Useful",
+        options: ["yes", "no", "maybe"],
         isMultiSelect: false,
     },
     {
-        property: "object",
-        name: "Object",
-        options: ["no_vehicle", "motocycle", "van", "pickup", "truck", "bus", "other_vehicle", "ok_car", "broken_car", "multiple_vehicle"],
+        property: "photo_angle",
+        name: "Photo Angle",
+        options: ["frente", "frente_cond", "frente_acomp", "lado_cond", "lado_acomp", "atras", "atras_cond", "atras_acomp", "otro"],
         isMultiSelect: false,
-    },
-    {
-        property: "photo_dimension",
-        name: "Photo Dimension",
-        options: ["partial", "almost_complete", "complete"],
-        isMultiSelect: false,
-    },
-    {
-        property: "severity",
-        name: "Severity",
-        options: ["low", "medium", "high"],
-        isMultiSelect: false,
-    },
-    {
-        property: "damage_type",
-        name: "Damage Type",
-        options: ["bumper_dent", "bumper_other", "door_dent", "glass_shatter", "h_lamp_broken", "t_lamp_broken", "scratch", "smash", "front", "back", "other"],
-        isMultiSelect: true,
     }
 ]
 
