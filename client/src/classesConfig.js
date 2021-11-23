@@ -2,7 +2,7 @@ const classesConfig = [
     {
         property: "useful",
         name: "Useful",
-        options: ["yes", "no", "maybe"],
+        options: ["yes", "no", "maybe", "other_vehicle"],
         isMultiSelect: false,
     },
     {
