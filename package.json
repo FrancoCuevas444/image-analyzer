@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "client": "cd client && yarn start",
-    "server": "nodemon server.js --ignore state.json --ignore state.csv",
+    "server": "nodemon server.js --ignore state-rotos-paragolpe.json --ignore state.csv",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
   },
   "dependencies": {

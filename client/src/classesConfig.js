@@ -1,15 +1,21 @@
 const classesConfig = [
     {
-        property: "useful",
-        name: "Useful",
-        options: ["yes", "no", "maybe", "other_vehicle"],
+        "property": "visible_damage",
+        "name": "Photo Angle",
+        "options": ["visible", "minimal", "not_visible"],
+        "isMultiSelect": false,
+    },
+    {
+        property: "reason_invisible",
+        name: "Photo Angle",
+        options: ["angle", "metadata", "other"],
         isMultiSelect: false,
     },
     {
-        property: "photo_angle",
-        name: "Photo Angle",
-        options: ["frente", "frente_cond", "frente_acomp", "lado_cond", "lado_acomp", "atras", "atras_cond", "atras_acomp", "otro"],
-        isMultiSelect: false,
+        "property": "should_discard",
+        "name": "Should Discard",
+        "options": ["yes", "no"],
+        "isMultiSelect": false,
     }
 ]
 
