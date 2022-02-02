@@ -27,7 +27,7 @@ yarn-error.log*
 /imgs
 
 # state files
-state.json
+state-rotos-paragolpe.json
 state.csv
 state_1.json
 state_1.csv
