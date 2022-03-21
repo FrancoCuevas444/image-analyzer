@@ -1,9 +1,15 @@
 const classesConfig = [
     {
-        "property": "class",
-        "name": "Paragolpe",
-        "options": ["broken", "not_broken", "not_visible"],
-        "isMultiSelect": false,
+        property: "useful",
+        name: "Useful",
+        options: ["yes", "no"],
+        isMultiSelect: false,
+    },
+    {
+        property: "photo_angle",
+        name: "Photo Angle",
+        options: ["frente", "frente_cond", "frente_acomp", "lado_cond", "lado_acomp", "atras", "atras_cond", "atras_acomp"],
+        isMultiSelect: false,
     }
 ]
 
