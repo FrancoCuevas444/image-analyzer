@@ -18,12 +18,12 @@ function App() {
         setImageInfo(newImageInfo);
     }
 
-    const handlePartsChange = (event, index) => {
+    const handlePartsChange = (event, index, part) => {
         let newImageInfo = JSON.parse(JSON.stringify(imageInfo));
         if (event.target.checked) {
-            newImageInfo.state["selected_parts"].push(index);
+            newImageInfo.state["selected_parts"].push(part);
         } else {
-            newImageInfo.state["selected_parts"] = newImageInfo.state["selected_parts"].filter(e => e === index);
+            newImageInfo.state["selected_parts"] = newImageInfo.state["selected_parts"].filter(e => e !== part);
         }
 
         setImageInfo(newImageInfo);
@@ -68,6 +68,7 @@ function App() {
                         metadata={imageInfo.metadata ? imageInfo.metadata: {}}
                         setSelectedParts={handlePartsChange}
                         selectedParts={imageInfo && imageInfo.state ? imageInfo.state["selected_parts"]: null}
+                        photoAngle={imageInfo && imageInfo.state ? imageInfo.state["photo_angle"] : null}
                     />
                     <SideBySideMagnifier
                         key={imageUrl}

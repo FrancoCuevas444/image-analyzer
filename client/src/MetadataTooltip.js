@@ -3,7 +3,7 @@ import {Checkbox} from "@material-ui/core";
 import {withStyles} from '@material-ui/core/styles';
 import InfoIcon from '@mui/icons-material/Info'
 import Tooltip from '@mui/material/Tooltip';
-
+import angles from "./angles";
 /*
 {
     "complaint": "M204933",
@@ -36,7 +36,7 @@ const checkboxStyles = theme => ({
 const CustomCheckbox = withStyles(checkboxStyles)(Checkbox);
 
 function MetadataTooltip(props) {
-    const {metadata, selectedParts, setSelectedParts} = props;
+    const {metadata, selectedParts, setSelectedParts, photoAngle} = props;
 
     return (
         <div className={"metadata-box"}>
@@ -73,7 +73,7 @@ function MetadataTooltip(props) {
             </div>
             <h3>Parts</h3>
             <div className={"flex-row"}>
-                {getMetadataOptions(metadata.damaged_parts ? metadata.damaged_parts : [], selectedParts, setSelectedParts)}
+                {getMetadataOptions(metadata.damaged_parts ? metadata.damaged_parts : [], selectedParts, setSelectedParts, photoAngle)}
             </div>
             <div className={"small-width flex-row"}>
                 <h4 className={"metadata-labels"}>Comment:</h4>
@@ -83,12 +83,23 @@ function MetadataTooltip(props) {
     )
 }
 
-function getMetadataOptions(damagedPartsMetadata, selectedParts, setSelectedParts) {
+function getMetadataOptions(damagedPartsMetadata, selectedParts, setSelectedParts, photoAngle) {
     let checks = [];
+    // remove duplicates
+    damagedPartsMetadata = damagedPartsMetadata.filter((elem, index, array) => array.findIndex(e => e.part === elem.part) === index);
+
+    // sort
+    damagedPartsMetadata.sort((a,b) => (a.part > b.part) ? 1 : ((b.part > a.part) ? -1 : 0))
+
+    // remove based on angle
+    if (photoAngle != null) {
+        damagedPartsMetadata = damagedPartsMetadata.filter(e => angles[photoAngle].includes(e.part))
+    }
+
     damagedPartsMetadata.forEach((p, i) => {
         checks.push(
             <div className={"flex-row-center"}>
-                <CustomCheckbox checked={selectedParts && selectedParts.includes(i)} onChange={(event) => setSelectedParts(event, i)} key={i} color="default"/>
+                <CustomCheckbox checked={selectedParts && selectedParts.includes(p.part)} onChange={(event) => setSelectedParts(event, i, p.part)} key={i} color="default"/>
                 <p>{p.part.toUpperCase()}</p>
                 <Tooltip title={`(${p.part_text}, ${p.task}, ${p.hours})`}>
                     <InfoIcon />
