@@ -61,7 +61,7 @@ function App() {
     return (
         <div className="App">
             <div key={currentImageName} className="main-container">
-                <h3>{currentImageName}</h3>
+                <h3>{currentImageName} ({currentImageIndex})</h3>
                 {generateFilters(handleFilterChange, currentImageState)}
                 <div className={"flex-row"}>
                     <MetadataTooltip
