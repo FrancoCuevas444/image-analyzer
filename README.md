@@ -1,29 +1,29 @@
-# Image Annotaror
+# Image Analyzer
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este proyecto fue construido en el margen del proyecto de grado _"Tasación de siniestros de automóviles mediante reconocimiento de imágenes aplicando inteligencia computacional"_. El objetivo del proyecto es mediante una interfaz web permitir etiquetar un conjunto de imágenes de vehículos del BSE.
 
 ## Setup
-0) Run `npm i nodemon -g`
-1) In the project directory run `npm install`
-2) Then, in the same directory run `yarn`. To install `yarn` use `npm install --global yarn`.
-3) Then `cd` into `/client` folder, and run `npm install` there as well.
-4) In the root folder create a `/imgs` folder and insert the images you want to analyze
+0) Correr el comando `npm i nodemon -g`
+1) En el directorio del proyecto ejecutar `npm install`
+2) Luego, en el mismo directorio ejecutar `yarn`. Para instalar `yarn` usar `npm install --global yarn`.
+3) Luego `cd` a la carpeta `/client`, y correr `npm install`.
+4) En el directorio raiz crear la carpeta `/imgs` e insertar las imágenes que se quieren analizar.
 
-## Run project
+## Ejecutar proyecto
 
-Once everything is setup, in the root folder run `npm run dev`.
+Una vez que está todo configurado, ejectuar en la raiz el comando `npm run dev`.
 
-Open a browser and go to [http://localhost:3000](http://localhost:3000) to use the tool.
+Abrir un navegador e ir a [http://localhost:3000](http://localhost:3000) para utilizar la herramienta.
 
-## Result
+## Resultados
 
-The result can be found in ``state_1.json`` and ``state_1.csv``.
+El resultado del etiquetado se encuentra ``state_1.json`` y ``state_1.csv``.
 
-## Configure the classes
+## Configurar las etiquetas
 
-To configure the classes you want to use, modify the ``/client/src/classesConfig.js`` file.
+Para configurar las etiquetas que se desean utilizar, modificar el ``/client/src/classesConfig.js``.
 
-Here is an example:
+Aquí hay un ejemplo:
 ```
 const classesConfig = [
     {

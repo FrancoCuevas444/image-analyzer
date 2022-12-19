@@ -92,7 +92,7 @@ function getMetadataOptions(damagedPartsMetadata, selectedParts, setSelectedPart
     damagedPartsMetadata.sort((a,b) => (a.part > b.part) ? 1 : ((b.part > a.part) ? -1 : 0))
 
     // remove based on angle
-    if (photoAngle != null) {
+    if (photoAngle != null && photoAngle !== "") {
         damagedPartsMetadata = damagedPartsMetadata.filter(e => angles[photoAngle].includes(e.part))
     }
 
